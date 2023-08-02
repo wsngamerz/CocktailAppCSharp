@@ -36,15 +36,6 @@ public class UserRepository : IUserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<ErrorOr<User>> GetByClerkId(string id)
-    {
-        var user = await _context.Users.SingleOrDefaultAsync(c => c.ClerkId == id);
-        if (user is null)
-            return Error.NotFound();
-
-        return user;
-    }
-
     public async Task<ErrorOr<Updated>> Update(User user)
     {
         _context.Users.Update(user);

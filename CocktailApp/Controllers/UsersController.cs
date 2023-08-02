@@ -105,7 +105,6 @@ public class UsersController : ApiController
     {
         var response = new UserResponse(
             user.Id,
-            user.ClerkId,
             user.FirstName,
             user.LastName,
             user.Bio,

@@ -9,11 +9,10 @@ using UuidExtensions;
 
 namespace CocktailApp.Models;
 
-[Table("Users"), PrimaryKey(nameof(Id)), Index(nameof(ClerkId), IsUnique = true)]
+[Table("Users"), PrimaryKey(nameof(Id))]
 public class User
 {
     [Key] public Guid Id { get; set; }
-    public string? ClerkId { get; set; } = string.Empty;
 
     [Required, MinLength(1), MaxLength(256)]
     public string FirstName { get; set; } = string.Empty;
@@ -43,7 +42,6 @@ public class User
     }
 
     public static ErrorOr<User> Create(
-        string? clerkId,
         string firstName,
         string lastName,
         string bio,
@@ -57,7 +55,6 @@ public class User
         var user = new User
         {
             Id = id ?? Uuid7.Guid(),
-            ClerkId = clerkId,
             FirstName = firstName,
             LastName = lastName,
             Bio = bio,
@@ -96,7 +93,6 @@ public class User
     public static ErrorOr<User> From(Guid id, UpdateUserRequest request)
     {
         return Create(
-            null,
             request.FirstName,
             request.LastName,
             request.Bio,

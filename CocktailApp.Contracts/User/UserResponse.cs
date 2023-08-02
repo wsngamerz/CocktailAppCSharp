@@ -4,7 +4,6 @@ namespace CocktailApp.Contracts.User;
 
 public record UserResponse(
     Guid Id,
-    string? ClerkId,
     string FirstName,
     string LastName,
     string Bio,

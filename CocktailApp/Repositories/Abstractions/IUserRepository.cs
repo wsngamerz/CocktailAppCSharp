@@ -3,7 +3,6 @@ using ErrorOr;
 
 namespace CocktailApp.Repositories.Abstractions;
 
-public interface IUserRepository: IRepository<User>
+public interface IUserRepository : IRepository<User>
 {
-    Task<ErrorOr<User>> GetByClerkId(string id);
 }
