@@ -20,19 +20,11 @@ public class CocktailsController : ApiController
     [HttpPost]
     public IActionResult CreateCocktail(CreateCocktailRequest request)
     {
-        var cocktail = new Cocktail(
-            id: Uuid7.Guid(),
-            name: request.Name,
-            description: request.Description,
-            slug: request.Name.ToLower().Replace(" ", "-"),
-            glassType: request.GlassType,
-            liquidColor: request.LiquidColor,
-            liquidOpacity: request.LiquidOpacity,
-            privacy: request.Privacy,
-            userId: request.UserId,
-            abv: request.Abv,
-            createdAt: DateTime.UtcNow
-        );
+        var requestToCocktailResult = Cocktail.From(request);
+
+        if (requestToCocktailResult.IsError)
+            return Problem(requestToCocktailResult.Errors);
+        var cocktail = requestToCocktailResult.Value;
 
         var createCocktailResult = _cocktailService.CreateCocktail(cocktail);
         return createCocktailResult.Match(
@@ -67,19 +59,11 @@ public class CocktailsController : ApiController
     [HttpPut("{id:guid}")]
     public IActionResult UpdateCocktail(Guid id, UpdateCocktailRequest request)
     {
-        var cocktail = new Cocktail(
-            id,
-            request.Name,
-            request.Description,
-            request.Slug,
-            request.GlassType,
-            request.LiquidColor,
-            request.LiquidOpacity,
-            request.Privacy,
-            request.UserId,
-            request.Abv,
-            request.CreatedAt
-        );
+        var requestToCocktailResult = Cocktail.From(id, request);
+
+        if (requestToCocktailResult.IsError)
+            return Problem(requestToCocktailResult.Errors);
+        var cocktail = requestToCocktailResult.Value;
 
         var updateCocktailResult = _cocktailService.UpdateCocktail(cocktail);
         return updateCocktailResult.Match(_ => NoContent(), Problem);

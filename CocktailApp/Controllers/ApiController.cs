@@ -1,5 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CocktailApp.Controllers;
 
@@ -7,10 +8,21 @@ namespace CocktailApp.Controllers;
 [Route("[controller]")]
 public class ApiController : ControllerBase
 {
-    protected IActionResult Problem(IEnumerable<Error> errors)
+    protected IActionResult Problem(List<Error> errors)
     {
-        var firstError = errors.First();
+        if (errors.All(e => e.Type == ErrorType.Validation))
+        {
+            var modelState = new ModelStateDictionary();
+            foreach (var error in errors)
+                modelState.AddModelError(error.Code, error.Description);
+            return ValidationProblem(modelState);
+        }
 
+        // If there are any unexpected errors, return 500 immediately since it can no longer be trusted
+        if (errors.Any(e => e.Type == ErrorType.Unexpected))
+            return Problem();
+        
+        var firstError = errors.First();
         var statusCode = firstError.Type switch
         {
             ErrorType.Conflict => StatusCodes.Status409Conflict,
