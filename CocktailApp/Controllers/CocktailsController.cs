@@ -8,7 +8,7 @@ namespace CocktailApp.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CocktailsController: ControllerBase
+public class CocktailsController : ApiController
 {
     private readonly ICocktailService _cocktailService;
 
@@ -33,60 +33,37 @@ public class CocktailsController: ControllerBase
             abv: request.Abv,
             createdAt: DateTime.UtcNow
         );
-        
-        _cocktailService.CreateCocktail(cocktail);
 
-        var response = new CocktailResponse(
-            cocktail.Id,
-            cocktail.Name,
-            cocktail.Description,
-            cocktail.Slug,
-            cocktail.GlassType,
-            cocktail.LiquidColor,
-            cocktail.LiquidOpacity,
-            cocktail.Privacy,
-            cocktail.UserId,
-            cocktail.Abv,
-            cocktail.CreatedAt
-        );
-
-        return CreatedAtAction(
-            nameof(GetCocktail),
-            new { id = response.Id },
-            response
-        );
+        var createCocktailResult = _cocktailService.CreateCocktail(cocktail);
+        return createCocktailResult.Match(
+            _ => CreatedAtAction(
+                nameof(GetCocktail),
+                new { id = cocktail.Id },
+                MapCocktailResponse(cocktail)
+            ), Problem);
     }
-    
+
     [HttpGet]
     public IActionResult GetCocktails()
     {
-        var cocktails = _cocktailService.GetCocktails();
-        
-        return Ok(cocktails);
+        var getCocktailsResult = _cocktailService.GetCocktails();
+        return getCocktailsResult.Match(
+            cocktails => Ok(cocktails.Select(MapCocktailResponse)),
+            Problem
+        );
     }
-    
+
     [HttpGet("{id:guid}")]
     public IActionResult GetCocktail(Guid id)
     {
-        var cocktail = _cocktailService.GetCocktail(id);
-        
-        var response = new CocktailResponse(
-            cocktail.Id,
-            cocktail.Name,
-            cocktail.Description,
-            cocktail.Slug,
-            cocktail.GlassType,
-            cocktail.LiquidColor,
-            cocktail.LiquidOpacity,
-            cocktail.Privacy,
-            cocktail.UserId,
-            cocktail.Abv,
-            cocktail.CreatedAt
+        var getCocktailResult = _cocktailService.GetCocktail(id);
+
+        return getCocktailResult.Match(
+            cocktail => Ok(MapCocktailResponse(cocktail)),
+            Problem
         );
-        
-        return Ok(response);
     }
-    
+
     [HttpPut("{id:guid}")]
     public IActionResult UpdateCocktail(Guid id, UpdateCocktailRequest request)
     {
@@ -103,16 +80,33 @@ public class CocktailsController: ControllerBase
             request.Abv,
             request.CreatedAt
         );
-        
-        _cocktailService.UpdateCocktail(cocktail);
-        
-        return NoContent();
+
+        var updateCocktailResult = _cocktailService.UpdateCocktail(cocktail);
+        return updateCocktailResult.Match(_ => NoContent(), Problem);
     }
-    
+
     [HttpDelete("{id:guid}")]
     public IActionResult DeleteCocktail(Guid id)
     {
-        _cocktailService.DeleteCocktail(id);
-        return NoContent();
+        var deleteCocktailResult = _cocktailService.DeleteCocktail(id);
+        return deleteCocktailResult.Match(_ => NoContent(), Problem);
+    }
+
+    private static CocktailResponse MapCocktailResponse(Cocktail cocktail)
+    {
+        var response = new CocktailResponse(
+            cocktail.Id,
+            cocktail.Name,
+            cocktail.Description,
+            cocktail.Slug,
+            cocktail.GlassType,
+            cocktail.LiquidColor,
+            cocktail.LiquidOpacity,
+            cocktail.Privacy,
+            cocktail.UserId,
+            cocktail.Abv,
+            cocktail.CreatedAt
+        );
+        return response;
     }
 }

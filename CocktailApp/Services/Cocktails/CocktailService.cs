@@ -1,32 +1,45 @@
 using CocktailApp.Models;
+using CocktailApp.ServiceErrors;
+using ErrorOr;
 
 namespace CocktailApp.Services.Cocktails;
 
 public class CocktailService: ICocktailService
 {
     private static readonly Dictionary<Guid, Cocktail> Cocktails = new();
-    public void CreateCocktail(Cocktail cocktail)
+    public ErrorOr<Created> CreateCocktail(Cocktail cocktail)
     {
         Cocktails.Add(cocktail.Id, cocktail);
+
+        return Result.Created;
     }
 
-    public Cocktail GetCocktail(Guid id)
+    public ErrorOr<Cocktail> GetCocktail(Guid id)
     {
-        return Cocktails[id];
+        if (Cocktails.TryGetValue(id, out var cocktail))
+        {
+            return cocktail;
+        }
+
+        return Errors.Cocktail.NotFound;
     }
 
-    public Cocktail[] GetCocktails()
+    public ErrorOr<Cocktail[]> GetCocktails()
     {
         return Cocktails.Values.ToArray();
     }
 
-    public void UpdateCocktail(Cocktail cocktail)
+    public ErrorOr<Updated> UpdateCocktail(Cocktail cocktail)
     {
         Cocktails[cocktail.Id] = cocktail;
+
+        return Result.Updated;
     }
 
-    public void DeleteCocktail(Guid id)
+    public ErrorOr<Deleted> DeleteCocktail(Guid id)
     {
         Cocktails.Remove(id);
+
+        return Result.Deleted;
     }
 }
