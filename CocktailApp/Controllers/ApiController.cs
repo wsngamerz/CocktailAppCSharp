@@ -6,6 +6,7 @@ namespace CocktailApp.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)

@@ -2,12 +2,9 @@ using CocktailApp.Contracts.Cocktail;
 using CocktailApp.Models;
 using CocktailApp.Services.Cocktails;
 using Microsoft.AspNetCore.Mvc;
-using UuidExtensions;
 
 namespace CocktailApp.Controllers;
 
-[ApiController]
-[Route("[controller]")]
 public class CocktailsController : ApiController
 {
     private readonly ICocktailService _cocktailService;
@@ -17,6 +14,13 @@ public class CocktailsController : ApiController
         _cocktailService = cocktailService;
     }
 
+    /// <summary>
+    /// Creates a cocktail
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <response code="201">Returns the newly created cocktail</response>
+    /// <response code="400">If the request is invalid</response>
     [HttpPost]
     public IActionResult CreateCocktail(CreateCocktailRequest request)
     {
@@ -35,6 +39,10 @@ public class CocktailsController : ApiController
             ), Problem);
     }
 
+    /// <summary>
+    /// Gets all cocktails
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult GetCocktails()
     {
@@ -45,6 +53,13 @@ public class CocktailsController : ApiController
         );
     }
 
+    /// <summary>
+    /// Gets a cocktail by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <response code="200">Returns the cocktail</response>
+    /// <response code="404">If the cocktail is not found</response>
     [HttpGet("{id:guid}")]
     public IActionResult GetCocktail(Guid id)
     {
@@ -56,6 +71,15 @@ public class CocktailsController : ApiController
         );
     }
 
+    /// <summary>
+    /// Updates a cocktail by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <response code="204">If the cocktail is updated</response>
+    /// <response code="400">If the request is invalid</response>
+    /// <response code="404">If the cocktail is not found</response>
     [HttpPut("{id:guid}")]
     public IActionResult UpdateCocktail(Guid id, UpdateCocktailRequest request)
     {
@@ -69,6 +93,11 @@ public class CocktailsController : ApiController
         return updateCocktailResult.Match(_ => NoContent(), Problem);
     }
 
+    /// <summary>
+    /// Deletes a cocktail by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id:guid}")]
     public IActionResult DeleteCocktail(Guid id)
     {
