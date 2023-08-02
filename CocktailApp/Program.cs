@@ -1,4 +1,3 @@
-using CocktailApp.Extensions;
 using CocktailApp.Services.Cocktails;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +23,7 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
-    app.ConfigureExceptionHandler();
+    app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
