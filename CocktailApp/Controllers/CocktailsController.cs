@@ -7,7 +7,7 @@ using UuidExtensions;
 namespace CocktailApp.Controllers;
 
 [ApiController]
-[Route("cocktails")]
+[Route("[controller]")]
 public class CocktailsController: ControllerBase
 {
     private readonly ICocktailService _cocktailService;

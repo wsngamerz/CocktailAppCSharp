@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 {
     builder.Logging.ClearProviders();
     builder.Logging.AddConsole();
-    
+
+    builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();
     builder.Services.AddSingleton<ICocktailService, CocktailService>();
 
