@@ -1,5 +1,4 @@
 using CocktailApp.Contracts.Cocktail;
-using UuidExtensions;
 
 namespace CocktailApp.Models;
 
