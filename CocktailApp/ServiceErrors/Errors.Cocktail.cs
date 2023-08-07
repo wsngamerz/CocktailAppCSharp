@@ -2,7 +2,7 @@ using ErrorOr;
 
 namespace CocktailApp.ServiceErrors;
 
-public class Errors
+public static class Errors
 {
     public static class Cocktail
     {
