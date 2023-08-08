@@ -1,6 +1,6 @@
-using CocktailApp.Abstractions.Repositories;
-using CocktailApp.Abstractions.Services;
 using CocktailApp.Models;
+using CocktailApp.Repositories.Abstractions;
+using CocktailApp.Services.Abstractions;
 using ErrorOr;
 
 namespace CocktailApp.Services;

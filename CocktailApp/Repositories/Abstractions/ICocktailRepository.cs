@@ -1,7 +1,7 @@
 using CocktailApp.Models;
 using ErrorOr;
 
-namespace CocktailApp.Abstractions.Repositories;
+namespace CocktailApp.Repositories.Abstractions;
 
 public interface ICocktailRepository
 {

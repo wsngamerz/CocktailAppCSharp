@@ -1,8 +1,8 @@
 using System.Reflection;
-using CocktailApp.Abstractions.Repositories;
-using CocktailApp.Abstractions.Services;
 using CocktailApp.Repositories;
+using CocktailApp.Repositories.Abstractions;
 using CocktailApp.Services;
+using CocktailApp.Services.Abstractions;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();
+    
     builder.Services.AddSingleton<ICocktailRepository, CocktailDictRepository>();
     builder.Services.AddSingleton<ICocktailService, CocktailService>();
 

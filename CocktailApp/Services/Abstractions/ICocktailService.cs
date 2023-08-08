@@ -1,7 +1,7 @@
 using CocktailApp.Models;
 using ErrorOr;
 
-namespace CocktailApp.Abstractions.Services;
+namespace CocktailApp.Services.Abstractions;
 
 public interface ICocktailService
 {
