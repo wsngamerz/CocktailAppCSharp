@@ -1,3 +1,5 @@
+using CocktailApp.Contracts.Enums;
+
 namespace CocktailApp.Contracts.Cocktail;
 
 public record CreateCocktailRequest(

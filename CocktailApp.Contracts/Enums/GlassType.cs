@@ -1,4 +1,4 @@
-namespace CocktailApp.Contracts.Cocktail;
+namespace CocktailApp.Contracts.Enums;
 
 public enum GlassType
 {

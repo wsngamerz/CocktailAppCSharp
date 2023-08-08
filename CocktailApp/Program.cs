@@ -1,5 +1,8 @@
 using System.Reflection;
-using CocktailApp.Services.Cocktails;
+using CocktailApp.Abstractions.Repositories;
+using CocktailApp.Abstractions.Services;
+using CocktailApp.Repositories;
+using CocktailApp.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();
+    builder.Services.AddSingleton<ICocktailRepository, CocktailDictRepository>();
     builder.Services.AddSingleton<ICocktailService, CocktailService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

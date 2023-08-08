@@ -1,4 +1,5 @@
 using CocktailApp.Contracts.Cocktail;
+using CocktailApp.Contracts.Enums;
 using CocktailApp.ServiceErrors;
 using ErrorOr;
 using UuidExtensions;
