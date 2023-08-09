@@ -1,8 +1,10 @@
 using System.Reflection;
+using CocktailApp.Data;
 using CocktailApp.Repositories;
 using CocktailApp.Repositories.Abstractions;
 using CocktailApp.Services;
 using CocktailApp.Services.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Logging.ClearProviders();
     builder.Logging.AddConsole();
 
+    builder.Services.AddDbContext<CocktailAppContext>(options =>
+    {
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection")
+        );
+    });
+
+    // builder.Services.AddSingleton<ICocktailRepository, CocktailDictRepository>();
+    builder.Services.AddScoped<ICocktailRepository, CocktailRepository>();
+    builder.Services.AddScoped<ICocktailService, CocktailService>();
+
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();
-    
-    builder.Services.AddSingleton<ICocktailRepository, CocktailDictRepository>();
-    builder.Services.AddSingleton<ICocktailService, CocktailService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -26,7 +36,7 @@ var builder = WebApplication.CreateBuilder(args);
             Title = "CocktailApp API",
             Description = "The cocktail app API"
         });
-        
+
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });

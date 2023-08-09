@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using CocktailApp.Contracts.Cocktail;
 using CocktailApp.Contracts.Enums;
 using CocktailApp.ServiceErrors;
@@ -6,6 +7,7 @@ using UuidExtensions;
 
 namespace CocktailApp.Models;
 
+[Table("Cocktails")]
 public class Cocktail
 {
     public const int MinNameLength = 3;
@@ -13,17 +15,21 @@ public class Cocktail
     public const int MinDescriptionLength = 3;
     public const int MaxDescriptionLength = 1024;
 
-    public Guid Id { get; }
-    public string Name { get; }
-    public string Description { get; }
-    public string Slug { get; }
-    public GlassType GlassType { get; }
-    public string LiquidColor { get; }
-    public float LiquidOpacity { get; }
-    public CocktailPrivacy Privacy { get; }
-    public int UserId { get; }
-    public decimal Abv { get; }
-    public DateTime CreatedAt { get; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string Slug { get; set; }
+    public GlassType GlassType { get; set; }
+    public string LiquidColor { get; set; }
+    public float LiquidOpacity { get; set; }
+    public CocktailPrivacy Privacy { get; set; }
+    public int UserId { get; set; }
+    public decimal Abv { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public Cocktail()
+    {
+    }
 
     private Cocktail(Guid id, string name, string description, string slug, GlassType glassType, string liquidColor,
         float liquidOpacity, CocktailPrivacy privacy, int userId, decimal abv, DateTime createdAt)
