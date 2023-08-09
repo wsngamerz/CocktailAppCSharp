@@ -22,7 +22,7 @@ public class CocktailsController : ApiController
     /// <response code="201">Returns the newly created cocktail</response>
     /// <response code="400">If the request is invalid</response>
     [HttpPost]
-    public IActionResult CreateCocktail(CreateCocktailRequest request)
+    public async Task<IActionResult> CreateCocktail(CreateCocktailRequest request)
     {
         var requestToCocktailResult = Cocktail.From(request);
 
@@ -30,7 +30,7 @@ public class CocktailsController : ApiController
             return Problem(requestToCocktailResult.Errors);
         var cocktail = requestToCocktailResult.Value;
 
-        var createCocktailResult = _cocktailService.CreateCocktail(cocktail);
+        var createCocktailResult = await _cocktailService.CreateCocktail(cocktail);
         return createCocktailResult.Match(
             _ => CreatedAtAction(
                 nameof(GetCocktail),
@@ -44,9 +44,9 @@ public class CocktailsController : ApiController
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult GetCocktails()
+    public async Task<IActionResult> GetCocktails()
     {
-        var getCocktailsResult = _cocktailService.GetCocktails();
+        var getCocktailsResult = await _cocktailService.GetCocktails();
         return getCocktailsResult.Match(
             cocktails => Ok(cocktails.Select(MapCocktailResponse)),
             Problem
@@ -61,9 +61,9 @@ public class CocktailsController : ApiController
     /// <response code="200">Returns the cocktail</response>
     /// <response code="404">If the cocktail is not found</response>
     [HttpGet("{id:guid}")]
-    public IActionResult GetCocktail(Guid id)
+    public async Task<IActionResult> GetCocktail(Guid id)
     {
-        var getCocktailResult = _cocktailService.GetCocktail(id);
+        var getCocktailResult = await _cocktailService.GetCocktail(id);
 
         return getCocktailResult.Match(
             cocktail => Ok(MapCocktailResponse(cocktail)),
@@ -81,7 +81,7 @@ public class CocktailsController : ApiController
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If the cocktail is not found</response>
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateCocktail(Guid id, UpdateCocktailRequest request)
+    public async Task<IActionResult> UpdateCocktail(Guid id, UpdateCocktailRequest request)
     {
         var requestToCocktailResult = Cocktail.From(id, request);
 
@@ -89,7 +89,7 @@ public class CocktailsController : ApiController
             return Problem(requestToCocktailResult.Errors);
         var cocktail = requestToCocktailResult.Value;
 
-        var updateCocktailResult = _cocktailService.UpdateCocktail(cocktail);
+        var updateCocktailResult = await _cocktailService.UpdateCocktail(cocktail);
         return updateCocktailResult.Match(_ => NoContent(), Problem);
     }
 
@@ -99,9 +99,9 @@ public class CocktailsController : ApiController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteCocktail(Guid id)
+    public async Task<IActionResult> DeleteCocktail(Guid id)
     {
-        var deleteCocktailResult = _cocktailService.DeleteCocktail(id);
+        var deleteCocktailResult = await _cocktailService.DeleteCocktail(id);
         return deleteCocktailResult.Match(_ => NoContent(), Problem);
     }
 

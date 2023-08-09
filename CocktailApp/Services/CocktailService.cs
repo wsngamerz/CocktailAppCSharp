@@ -14,28 +14,28 @@ public class CocktailService: ICocktailService
         _cocktailRepository = cocktailRepository;
     }
     
-    public ErrorOr<Created> CreateCocktail(Cocktail cocktail)
+    public async Task<ErrorOr<Created>> CreateCocktail(Cocktail cocktail)
     {
-        return _cocktailRepository.Create(cocktail);
+        return await _cocktailRepository.Create(cocktail);
     }
 
-    public ErrorOr<Cocktail> GetCocktail(Guid id)
+    public async Task<ErrorOr<Cocktail>> GetCocktail(Guid id)
     {
-        return _cocktailRepository.GetById(id);
+        return await _cocktailRepository.GetById(id);
     }
 
-    public ErrorOr<IEnumerable<Cocktail>> GetCocktails()
+    public async Task<ErrorOr<IEnumerable<Cocktail>>> GetCocktails()
     {   
-        return _cocktailRepository.GetMany();
+        return await _cocktailRepository.GetMany();
     }
 
-    public ErrorOr<Updated> UpdateCocktail(Cocktail cocktail)
+    public async Task<ErrorOr<Updated>> UpdateCocktail(Cocktail cocktail)
     {
-        return _cocktailRepository.Update(cocktail);
+        return await _cocktailRepository.Update(cocktail);
     }
 
-    public ErrorOr<Deleted> DeleteCocktail(Guid id)
+    public async Task<ErrorOr<Deleted>> DeleteCocktail(Guid id)
     {
-        return _cocktailRepository.Delete(id);
+        return await _cocktailRepository.Delete(id);
     }
 }

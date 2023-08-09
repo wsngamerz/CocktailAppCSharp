@@ -5,60 +5,54 @@ using ErrorOr;
 
 namespace CocktailApp.Repositories;
 
-public class CocktailDictRepository: ICocktailRepository
+public class CocktailDictRepository : ICocktailRepository
 {
     private static readonly Dictionary<Guid, Cocktail> Cocktails = new();
-    
-    public ErrorOr<Created> Create(Cocktail cocktail)
+
+    public Task<ErrorOr<Created>> Create(Cocktail cocktail)
     {
         Cocktails.Add(cocktail.Id, cocktail);
 
-        return Result.Created;
+        return Task.FromResult<ErrorOr<Created>>(Result.Created);
     }
 
-    public ErrorOr<Cocktail> GetById(Guid id)
+    public Task<ErrorOr<Cocktail>> GetById(Guid id)
     {
-        if (Cocktails.TryGetValue(id, out var cocktail))
-        {
-            return cocktail;
-        }
-
-        return Errors.Cocktail.NotFound;
+        return Cocktails.TryGetValue(id, out var cocktail)
+            ? Task.FromResult<ErrorOr<Cocktail>>(cocktail)
+            : Task.FromResult<ErrorOr<Cocktail>>(Errors.Cocktail.NotFound);
     }
 
-    public ErrorOr<Cocktail> GetBySlug(string slug)
+    public Task<ErrorOr<Cocktail>> GetBySlug(string slug)
     {
         var cocktail = Cocktails.Values.FirstOrDefault(c => c.Slug == slug);
 
-        if (cocktail is not null)
-        {
-            return cocktail;
-        }
-
-        return Errors.Cocktail.NotFound;
+        return cocktail is not null
+            ? Task.FromResult<ErrorOr<Cocktail>>(cocktail)
+            : Task.FromResult<ErrorOr<Cocktail>>(Errors.Cocktail.NotFound);
     }
 
-    public ErrorOr<IEnumerable<Cocktail>> GetMany()
+    public Task<ErrorOr<IEnumerable<Cocktail>>> GetMany()
     {
-        return Cocktails.Values;
+        return Task.FromResult<ErrorOr<IEnumerable<Cocktail>>>(Cocktails.Values);
     }
 
-    public ErrorOr<Updated> Update(Cocktail cocktail)
+    public Task<ErrorOr<Updated>> Update(Cocktail cocktail)
     {
         Cocktails[cocktail.Id] = cocktail;
 
-        return Result.Updated;
+        return Task.FromResult<ErrorOr<Updated>>(Result.Updated);
     }
 
-    public ErrorOr<Deleted> Delete(Guid id)
+    public Task<ErrorOr<Deleted>> Delete(Guid id)
     {
         Cocktails.Remove(id);
 
-        return Result.Deleted;
+        return Task.FromResult<ErrorOr<Deleted>>(Result.Deleted);
     }
 
-    public ErrorOr<int> Count()
+    public Task<ErrorOr<int>> Count()
     {
-        return Cocktails.Count;
+        return Task.FromResult<ErrorOr<int>>(Cocktails.Count);
     }
 }
