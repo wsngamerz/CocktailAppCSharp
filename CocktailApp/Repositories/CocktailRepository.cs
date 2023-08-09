@@ -1,7 +1,6 @@
 using CocktailApp.Data;
 using CocktailApp.Models;
 using CocktailApp.Repositories.Abstractions;
-using CocktailApp.ServiceErrors;
 using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +26,7 @@ public class CocktailRepository: ICocktailRepository
     {
         var cocktail = await _context.Cocktails.FindAsync(id);
         if (cocktail is null)
-            return Errors.Cocktail.NotFound;
+            return Error.NotFound();
         
         return cocktail;
     }
@@ -36,7 +35,7 @@ public class CocktailRepository: ICocktailRepository
     {
         var cocktail = await _context.Cocktails.SingleOrDefaultAsync(c => c.Slug == slug);
         if (cocktail is null)
-            return Errors.Cocktail.NotFound;
+            return Error.NotFound();
         
         return cocktail;
     }

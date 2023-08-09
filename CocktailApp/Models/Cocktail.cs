@@ -1,51 +1,32 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using CocktailApp.Contracts.Cocktail;
 using CocktailApp.Contracts.Enums;
-using CocktailApp.ServiceErrors;
 using ErrorOr;
+using Microsoft.EntityFrameworkCore;
 using UuidExtensions;
 
 namespace CocktailApp.Models;
 
-[Table("Cocktails")]
+[Table("Cocktails"), PrimaryKey(nameof(Id)), Index(nameof(Slug), IsUnique = true)]
 public class Cocktail
 {
-    public const int MinNameLength = 3;
-    public const int MaxNameLength = 64;
-    public const int MinDescriptionLength = 3;
-    public const int MaxDescriptionLength = 1024;
+    [Key] public Guid Id { get; set; }
 
-    public Guid Id { get; set; }
+    [Required, MinLength(1), MaxLength(256)]
     public string Name { get; set; }
+
+    [Required, MinLength(1), MaxLength(1024)]
     public string Description { get; set; }
-    public string Slug { get; set; }
-    public GlassType GlassType { get; set; }
-    public string LiquidColor { get; set; }
-    public float LiquidOpacity { get; set; }
-    public CocktailPrivacy Privacy { get; set; }
+
+    [Required] public string Slug { get; set; }
+    [Required] public GlassType GlassType { get; set; }
+    [Required] public string LiquidColor { get; set; }
+    [Required] public float LiquidOpacity { get; set; }
+    [Required] public CocktailPrivacy Privacy { get; set; }
     public int UserId { get; set; }
-    public decimal Abv { get; set; }
-    public DateTime CreatedAt { get; set; }
-
-    public Cocktail()
-    {
-    }
-
-    private Cocktail(Guid id, string name, string description, string slug, GlassType glassType, string liquidColor,
-        float liquidOpacity, CocktailPrivacy privacy, int userId, decimal abv, DateTime createdAt)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Slug = slug;
-        GlassType = glassType;
-        LiquidColor = liquidColor;
-        LiquidOpacity = liquidOpacity;
-        Privacy = privacy;
-        UserId = userId;
-        Abv = abv;
-        CreatedAt = createdAt;
-    }
+    [Required] public decimal Abv { get; set; }
+    [Required] public DateTime CreatedAt { get; set; }
 
     public static ErrorOr<Cocktail> Create(
         string name,
@@ -59,29 +40,37 @@ public class Cocktail
         Guid? id = null
     )
     {
-        List<Error> errors = new();
+        var cocktail = new Cocktail
+        {
+            Id = id ?? Uuid7.Guid(),
+            Name = name,
+            Description = description,
+            Slug = GenerateSlug(name),
+            GlassType = glassType,
+            LiquidColor = liquidColor,
+            LiquidOpacity = liquidOpacity,
+            Privacy = privacy,
+            UserId = userId,
+            Abv = abv,
+            CreatedAt = DateTime.UtcNow
+        };
 
-        if (name.Length is < MinNameLength or > MaxNameLength)
-            errors.Add(Errors.Cocktail.InvalidName);
+        // check that the cocktail is valid using the annotations
+        var results = new List<ValidationResult>();
+        var isValid = Validator.TryValidateObject(cocktail, new ValidationContext(cocktail), results, true);
 
-        if (description.Length is < MinDescriptionLength or > MaxDescriptionLength)
-            errors.Add(Errors.Cocktail.InvalidDescription);
+        if (isValid) return cocktail;
+        
+        var errors = new List<Error>();
 
-        if (errors.Any()) return errors;
+        results.ForEach(r =>
+        {
+            if (r.ErrorMessage != null)
+                errors.Add(Error.Validation("validation", r.ErrorMessage));
+        });
 
-        return new Cocktail(
-            id ?? Uuid7.Guid(),
-            name,
-            description,
-            name.ToLower().Replace(" ", "-"),
-            glassType,
-            liquidColor,
-            liquidOpacity,
-            privacy,
-            userId,
-            abv,
-            DateTime.UtcNow
-        );
+        return errors;
+
     }
 
     public static ErrorOr<Cocktail> From(CreateCocktailRequest request)
@@ -111,5 +100,10 @@ public class Cocktail
             request.Abv,
             id
         );
+    }
+
+    private static string GenerateSlug(string name)
+    {
+        return name.ToLower().Replace(" ", "-");
     }
 }

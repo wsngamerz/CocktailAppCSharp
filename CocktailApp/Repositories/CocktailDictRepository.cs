@@ -1,6 +1,5 @@
 using CocktailApp.Models;
 using CocktailApp.Repositories.Abstractions;
-using CocktailApp.ServiceErrors;
 using ErrorOr;
 
 namespace CocktailApp.Repositories;
@@ -20,7 +19,7 @@ public class CocktailDictRepository : ICocktailRepository
     {
         return Cocktails.TryGetValue(id, out var cocktail)
             ? Task.FromResult<ErrorOr<Cocktail>>(cocktail)
-            : Task.FromResult<ErrorOr<Cocktail>>(Errors.Cocktail.NotFound);
+            : Task.FromResult<ErrorOr<Cocktail>>(Error.NotFound());
     }
 
     public Task<ErrorOr<Cocktail>> GetBySlug(string slug)
@@ -29,7 +28,7 @@ public class CocktailDictRepository : ICocktailRepository
 
         return cocktail is not null
             ? Task.FromResult<ErrorOr<Cocktail>>(cocktail)
-            : Task.FromResult<ErrorOr<Cocktail>>(Errors.Cocktail.NotFound);
+            : Task.FromResult<ErrorOr<Cocktail>>(Error.NotFound());
     }
 
     public Task<ErrorOr<IEnumerable<Cocktail>>> GetMany()
