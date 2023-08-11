@@ -19,8 +19,10 @@ var builder = WebApplication.CreateBuilder(args);
         );
     });
 
-    // builder.Services.AddSingleton<ICocktailRepository, CocktailDictRepository>();
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<ICocktailRepository, CocktailRepository>();
+    
+    builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<ICocktailService, CocktailService>();
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
