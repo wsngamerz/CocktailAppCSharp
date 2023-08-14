@@ -11,7 +11,7 @@ public record CocktailResponse(
     string LiquidColor,
     float LiquidOpacity,
     CocktailPrivacy Privacy,
-    int UserId,
+    Guid UserId,
     decimal Abv,
     DateTime CreatedAt
 );

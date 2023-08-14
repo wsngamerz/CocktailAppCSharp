@@ -34,6 +34,10 @@ public class User
 
     [Required] public DateTime CreatedAt { get; set; }
 
+    public ICollection<Cocktail> Cocktails { get; set; }
+    public ICollection<BarItem> BarItems { get; set; }
+    public ICollection<UserFavourite> Favourites { get; set; }
+
     private User()
     {
     }

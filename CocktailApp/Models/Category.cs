@@ -22,7 +22,9 @@ public class Category
     public string Description { get; set; } = string.Empty;
 
     public Guid? ParentId { get; set; }
-    
+
+    [ForeignKey(nameof(ParentId))] public Category Parent { get; set; }
+
 
     private Category()
     {
@@ -47,7 +49,7 @@ public class Category
         var isValid = Validator.TryValidateObject(category, new ValidationContext(category), results, true);
 
         if (isValid) return category;
-        
+
         var errors = new List<Error>();
 
         results.ForEach(r =>
@@ -66,7 +68,7 @@ public class Category
             Id = id
         };
     }
-    
+
     public static ErrorOr<Category> From(CreateCategoryRequest request)
     {
         return Create(
@@ -75,9 +77,8 @@ public class Category
             request.ParentId
         );
     }
-    
-    
-    
+
+
     public static ErrorOr<Category> From(Guid id, UpdateCategoryRequest request)
     {
         return Create(

@@ -21,6 +21,8 @@ public class Ingredient
     [Required] public Guid CategoryId { get; set; }
     [Required] public decimal Abv { get; set; }
 
+    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; }
+
     private Ingredient()
     {
     }
@@ -46,7 +48,7 @@ public class Ingredient
         var isValid = Validator.TryValidateObject(ingredient, new ValidationContext(ingredient), results, true);
 
         if (isValid) return ingredient;
-        
+
         var errors = new List<Error>();
 
         results.ForEach(r =>
@@ -65,7 +67,7 @@ public class Ingredient
             Id = id
         };
     }
-    
+
     public static ErrorOr<Ingredient> From(CreateIngredientRequest request)
     {
         return Create(
@@ -75,9 +77,8 @@ public class Ingredient
             request.Abv
         );
     }
-    
-    
-    
+
+
     public static ErrorOr<Ingredient> From(Guid id, UpdateIngredientRequest request)
     {
         return Create(

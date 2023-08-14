@@ -24,9 +24,14 @@ public class Cocktail
     [Required] public string LiquidColor { get; set; } = string.Empty;
     [Required] public float LiquidOpacity { get; set; }
     [Required] public CocktailPrivacy Privacy { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     [Required] public decimal Abv { get; set; }
     [Required] public DateTime CreatedAt { get; set; }
+
+    [ForeignKey(nameof(UserId))] public User User { get; set; }
+
+    public ICollection<CocktailIngredient> Ingredients { get; set; }
+    public ICollection<CocktailInstruction> Instructions { get; set; }
 
     private Cocktail()
     {
@@ -39,7 +44,7 @@ public class Cocktail
         string liquidColor,
         float liquidOpacity,
         CocktailPrivacy privacy,
-        int userId,
+        Guid userId,
         decimal abv,
         Guid? id = null
     )
@@ -64,7 +69,7 @@ public class Cocktail
         var isValid = Validator.TryValidateObject(cocktail, new ValidationContext(cocktail), results, true);
 
         if (isValid) return cocktail;
-        
+
         var errors = new List<Error>();
 
         results.ForEach(r =>
