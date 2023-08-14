@@ -9,6 +9,7 @@ public class CocktailAppContext : DbContext
     {
     }
 
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Cocktail> Cocktails { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
     public DbSet<User> Users { get; set; }

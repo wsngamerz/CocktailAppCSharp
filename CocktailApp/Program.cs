@@ -19,10 +19,12 @@ var builder = WebApplication.CreateBuilder(args);
         );
     });
 
+    builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
     builder.Services.AddScoped<ICocktailRepository, CocktailRepository>();
     builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+    builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<ICocktailService, CocktailService>();
     builder.Services.AddScoped<IIngredientService, IngredientService>();
     builder.Services.AddScoped<IUserService, UserService>();

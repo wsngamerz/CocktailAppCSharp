@@ -8,7 +8,7 @@ using UuidExtensions;
 
 namespace CocktailApp.Models;
 
-[Table("Cocktails"), PrimaryKey(nameof(Id)), Index(nameof(Slug), IsUnique = true)]
+[Table("Cocktails"), PrimaryKey(nameof(Id))]
 public class Cocktail
 {
     [Key] public Guid Id { get; set; }
