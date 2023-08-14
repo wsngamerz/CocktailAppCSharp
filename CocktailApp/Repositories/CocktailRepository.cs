@@ -55,7 +55,7 @@ public class CocktailRepository: ICocktailRepository
 
     public async Task<ErrorOr<Deleted>> Delete(Guid id)
     {
-        _context.Cocktails.Remove(new Cocktail { Id = id });
+        _context.Cocktails.Remove(Cocktail.CreateId(id));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

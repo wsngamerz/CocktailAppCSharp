@@ -55,7 +55,7 @@ public class UserRepository: IUserRepository
 
     public async Task<ErrorOr<Deleted>> Delete(Guid id)
     {
-        _context.Users.Remove(new User { Id = id });
+        _context.Users.Remove(User.CreateId(id));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

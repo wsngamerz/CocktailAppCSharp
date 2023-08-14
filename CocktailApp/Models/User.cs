@@ -13,26 +13,30 @@ namespace CocktailApp.Models;
 public class User
 {
     [Key] public Guid Id { get; set; }
-    public string? ClerkId { get; set; }
+    public string? ClerkId { get; set; } = string.Empty;
 
     [Required, MinLength(1), MaxLength(256)]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
 
     [Required, MinLength(1), MaxLength(256)]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
 
     [Required, MinLength(1), MaxLength(1024)]
-    public string Bio { get; set; }
+    public string Bio { get; set; } = string.Empty;
 
-    [Required] public string ImageUrl { get; set; }
+    [Required] public string ImageUrl { get; set; } = string.Empty;
 
-    [Required] public string AccentColor { get; set; }
+    [Required] public string AccentColor { get; set; } = string.Empty;
 
     [Required] public UserPrivacy Privacy { get; set; }
 
     [Required] public UserRole Role { get; set; }
 
     [Required] public DateTime CreatedAt { get; set; }
+
+    private User()
+    {
+    }
 
     public static ErrorOr<User> Create(
         string? clerkId,
@@ -76,7 +80,15 @@ public class User
 
         return errors;
     }
-    
+
+    public static User CreateId(Guid id)
+    {
+        return new User
+        {
+            Id = id
+        };
+    }
+
     public static ErrorOr<User> From(Guid id, UpdateUserRequest request)
     {
         return Create(

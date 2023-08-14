@@ -14,19 +14,23 @@ public class Cocktail
     [Key] public Guid Id { get; set; }
 
     [Required, MinLength(1), MaxLength(256)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required, MinLength(1), MaxLength(1024)]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    [Required] public string Slug { get; set; }
+    [Required] public string Slug { get; set; } = string.Empty;
     [Required] public GlassType GlassType { get; set; }
-    [Required] public string LiquidColor { get; set; }
+    [Required] public string LiquidColor { get; set; } = string.Empty;
     [Required] public float LiquidOpacity { get; set; }
     [Required] public CocktailPrivacy Privacy { get; set; }
     public int UserId { get; set; }
     [Required] public decimal Abv { get; set; }
     [Required] public DateTime CreatedAt { get; set; }
+
+    private Cocktail()
+    {
+    }
 
     public static ErrorOr<Cocktail> Create(
         string name,
@@ -70,7 +74,14 @@ public class Cocktail
         });
 
         return errors;
+    }
 
+    public static Cocktail CreateId(Guid id)
+    {
+        return new Cocktail
+        {
+            Id = id
+        };
     }
 
     public static ErrorOr<Cocktail> From(CreateCocktailRequest request)
