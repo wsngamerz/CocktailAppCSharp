@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CocktailApp.Models;
 
-[Table("UserFavourites"), PrimaryKey(nameof(UserId), nameof(CocktailId))]
-public class UserFavourite
+[Table("CocktailFavourites"), PrimaryKey(nameof(UserId), nameof(CocktailId))]
+public class CocktailFavourite
 {
     public Guid UserId { get; set; }
     public Guid CocktailId { get; set; }

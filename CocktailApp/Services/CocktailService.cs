@@ -21,12 +21,12 @@ public class CocktailService: ICocktailService
 
     public async Task<ErrorOr<Cocktail>> GetCocktail(Guid id)
     {
-        return await _cocktailRepository.GetById(id);
+        return await _cocktailRepository.Get(id);
     }
 
     public async Task<ErrorOr<IEnumerable<Cocktail>>> GetCocktails()
     {   
-        return await _cocktailRepository.GetMany();
+        return await _cocktailRepository.All();
     }
 
     public async Task<ErrorOr<Updated>> UpdateCocktail(Cocktail cocktail)

@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
         );
     });
 
+    builder.Services.AddScoped<IBarItemRepository, BarItemRepository>();
     builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
     builder.Services.AddScoped<ICocktailRepository, CocktailRepository>();
     builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();

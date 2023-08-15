@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CocktailApp.Repositories;
 
-public class CocktailRepository: ICocktailRepository
+public class CocktailRepository : ICocktailRepository
 {
     private readonly CocktailAppContext _context;
-    
+
     public CocktailRepository(CocktailAppContext context)
     {
-        _context = context;    
+        _context = context;
     }
-    
+
     public async Task<ErrorOr<Created>> Create(Cocktail cocktail)
     {
         await _context.Cocktails.AddAsync(cocktail);
@@ -22,13 +22,18 @@ public class CocktailRepository: ICocktailRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<Cocktail>> GetById(Guid id)
+    public async Task<ErrorOr<Cocktail>> Get(params Guid[] ids)
     {
-        var cocktail = await _context.Cocktails.FindAsync(id);
+        var cocktail = await _context.Cocktails.FindAsync(ids[0]);
         if (cocktail is null)
             return Error.NotFound();
-        
+
         return cocktail;
+    }
+
+    public async Task<ErrorOr<IEnumerable<Cocktail>>> All()
+    {
+        return await _context.Cocktails.ToListAsync();
     }
 
     public async Task<ErrorOr<Cocktail>> GetBySlug(string slug)
@@ -36,26 +41,21 @@ public class CocktailRepository: ICocktailRepository
         var cocktail = await _context.Cocktails.SingleOrDefaultAsync(c => c.Slug == slug);
         if (cocktail is null)
             return Error.NotFound();
-        
-        return cocktail;
-    }
 
-    public async Task<ErrorOr<IEnumerable<Cocktail>>> GetMany()
-    {
-        return await _context.Cocktails.ToListAsync();
+        return cocktail;
     }
 
     public async Task<ErrorOr<Updated>> Update(Cocktail cocktail)
     {
         _context.Cocktails.Update(cocktail);
         await _context.SaveChangesAsync();
-        
+
         return Result.Updated;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(Guid id)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
     {
-        _context.Cocktails.Remove(Cocktail.CreateId(id));
+        _context.Cocktails.Remove(Cocktail.CreateId(ids[0]));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

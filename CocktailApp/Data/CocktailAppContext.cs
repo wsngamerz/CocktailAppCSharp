@@ -18,5 +18,7 @@ public class CocktailAppContext : DbContext
     public DbSet<List> Lists { get; set; }
     public DbSet<ListItem> ListItems { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<UserFavourite> UserFavourites { get; set; }
+
+    public DbSet<CocktailFavourite> CocktailFavourites { get; set; }
+    public DbSet<ListFavourite> ListFavourites { get; set; }
 }

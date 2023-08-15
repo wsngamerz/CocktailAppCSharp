@@ -21,12 +21,12 @@ public class CategoryService: ICategoryService
 
     public async Task<ErrorOr<Category>> GetCategory(Guid id)
     {
-        return await _categoryRepository.GetById(id);
+        return await _categoryRepository.Get(id);
     }
 
     public async Task<ErrorOr<IEnumerable<Category>>> GetCategories()
     {   
-        return await _categoryRepository.GetMany();
+        return await _categoryRepository.All();
     }
 
     public async Task<ErrorOr<Updated>> UpdateCategory(Category category)

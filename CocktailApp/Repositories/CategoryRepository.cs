@@ -22,16 +22,16 @@ public class CategoryRepository : ICategoryRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<Category>> GetById(Guid id)
+    public async Task<ErrorOr<Category>> Get(params Guid[] ids)
     {
-        var category = await _context.Categories.FindAsync(id);
+        var category = await _context.Categories.FindAsync(ids[0]);
         if (category is null)
             return Error.NotFound();
 
         return category;
     }
 
-    public async Task<ErrorOr<IEnumerable<Category>>> GetMany()
+    public async Task<ErrorOr<IEnumerable<Category>>> All()
     {
         return await _context.Categories.ToListAsync();
     }
@@ -44,10 +44,9 @@ public class CategoryRepository : ICategoryRepository
         return Result.Updated;
     }
 
-
-    public async Task<ErrorOr<Deleted>> Delete(Guid id)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
     {
-        _context.Categories.Remove(Category.CreateId(id));
+        _context.Categories.Remove(Category.CreateId(ids[0]));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

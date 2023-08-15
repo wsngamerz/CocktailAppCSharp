@@ -36,7 +36,7 @@ public class User
 
     public ICollection<Cocktail> Cocktails { get; set; }
     public ICollection<BarItem> BarItems { get; set; }
-    public ICollection<UserFavourite> Favourites { get; set; }
+    public ICollection<CocktailFavourite> Favourites { get; set; }
 
     private User()
     {

@@ -21,12 +21,12 @@ public class IngredientService: IIngredientService
 
     public async Task<ErrorOr<Ingredient>> GetIngredient(Guid id)
     {
-        return await _ingredientRepository.GetById(id);
+        return await _ingredientRepository.Get(id);
     }
 
     public async Task<ErrorOr<IEnumerable<Ingredient>>> GetIngredients()
     {   
-        return await _ingredientRepository.GetMany();
+        return await _ingredientRepository.All();
     }
 
     public async Task<ErrorOr<Updated>> UpdateIngredient(Ingredient ingredient)
