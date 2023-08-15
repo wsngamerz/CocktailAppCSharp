@@ -10,5 +10,6 @@ public record CreateCocktailRequest(
     float LiquidOpacity,
     CocktailPrivacy Privacy,
     Guid UserId,
-    decimal Abv
-);
+    decimal Abv,
+    IEnumerable<CreateCocktailIngredient> Ingredients,
+    IEnumerable<CreateCocktailInstruction> Instructions);

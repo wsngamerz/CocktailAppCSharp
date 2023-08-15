@@ -1,3 +1,4 @@
+using CocktailApp.Contracts.Cocktail;
 using CocktailApp.Data;
 using CocktailApp.Models;
 using CocktailApp.Repositories.Abstractions;
@@ -18,6 +19,20 @@ public class CocktailRepository : ICocktailRepository
     public async Task<ErrorOr<Created>> Create(Cocktail cocktail)
     {
         await _context.Cocktails.AddAsync(cocktail);
+        await _context.SaveChangesAsync();
+        return Result.Created;
+    }
+
+    public async Task<ErrorOr<Created>> CreateIngredients(IEnumerable<CocktailIngredient> ingredients)
+    {
+        await _context.CocktailIngredients.AddRangeAsync(ingredients);
+        await _context.SaveChangesAsync();
+        return Result.Created;
+    }
+
+    public async Task<ErrorOr<Created>> CreateInstructions(IEnumerable<CocktailInstruction> instructions)
+    {
+        await _context.CocktailInstructions.AddRangeAsync(instructions);
         await _context.SaveChangesAsync();
         return Result.Created;
     }
@@ -43,6 +58,41 @@ public class CocktailRepository : ICocktailRepository
             return Error.NotFound();
 
         return cocktail;
+    }
+
+    public async Task<ErrorOr<DetailedCocktail>> GetDetailed(Guid id)
+    {
+        var detailedCocktail = await _context.Cocktails
+            .Include(cocktail => cocktail.Ingredients)
+            .ThenInclude(cocktailIngredient => cocktailIngredient.Ingredient)
+            .Include(cocktail => cocktail.Instructions)
+            .FirstOrDefaultAsync(c => c.Id == id);
+        if (detailedCocktail is null)
+            return Error.NotFound();
+
+        return new DetailedCocktail(
+            detailedCocktail.Id,
+            detailedCocktail.Name,
+            detailedCocktail.Description,
+            detailedCocktail.Slug,
+            detailedCocktail.GlassType,
+            detailedCocktail.LiquidColor,
+            detailedCocktail.LiquidOpacity,
+            detailedCocktail.Privacy,
+            detailedCocktail.UserId,
+            detailedCocktail.Abv,
+            detailedCocktail.CreatedAt,
+            detailedCocktail.Ingredients.Select(ing => new CocktailIngredientResponse(
+                ing.Amount,
+                ing.Unit,
+                ing.Position,
+                ing.Ingredient.ToResponse()
+            )),
+            detailedCocktail.Instructions.Select(ins => new CocktailInstructionResponse(
+                ins.Content,
+                ins.Position
+            ))
+        );
     }
 
     public async Task<ErrorOr<Updated>> Update(Cocktail cocktail)

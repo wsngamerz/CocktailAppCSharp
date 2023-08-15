@@ -89,4 +89,28 @@ public class Ingredient
             id
         );
     }
+
+    public IngredientResponse ToResponse()
+    {
+        var response = new IngredientResponse(
+            Id,
+            Name,
+            Description,
+            CategoryId,
+            Abv
+        );
+        return response;
+    }
+
+    public static IngredientResponse ToResponse(Ingredient ingredient)
+    {
+        var response = new IngredientResponse(
+            ingredient.Id,
+            ingredient.Name,
+            ingredient.Description,
+            ingredient.CategoryId,
+            ingredient.Abv
+        );
+        return response;
+    }
 }

@@ -1,6 +1,7 @@
 using CocktailApp.Contracts.Cocktail;
 using CocktailApp.Models;
 using CocktailApp.Services.Abstractions;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CocktailApp.Controllers;
@@ -25,12 +26,28 @@ public class CocktailsController : ApiController
     public async Task<IActionResult> CreateCocktail(CreateCocktailRequest request)
     {
         var requestToCocktailResult = Cocktail.From(request);
-
+        
         if (requestToCocktailResult.IsError)
-            return Problem(requestToCocktailResult.Errors);
+           return Problem(requestToCocktailResult.Errors);
         var cocktail = requestToCocktailResult.Value;
+        
+        var requestToCocktailIngredientsResult = CocktailIngredient.From(cocktail.Id, request);
+        var requestToCocktailInstructionsResult = CocktailInstruction.From(cocktail.Id, request);
 
-        var createCocktailResult = await _cocktailService.CreateCocktail(cocktail);
+        if (requestToCocktailInstructionsResult.IsError ||
+            requestToCocktailIngredientsResult.IsError)
+        {
+            List<Error> errors = new();
+            errors.AddRange(requestToCocktailIngredientsResult.Errors);
+            errors.AddRange(requestToCocktailInstructionsResult.Errors);
+            return Problem(errors);
+        }
+        
+        var cocktailIngredients = requestToCocktailIngredientsResult.Value;
+        var cocktailInstructions = requestToCocktailInstructionsResult.Value;
+
+        var createCocktailResult =
+            await _cocktailService.CreateCocktail(cocktail, cocktailIngredients, cocktailInstructions);
         return createCocktailResult.Match(
             _ => CreatedAtAction(
                 nameof(GetCocktail),
@@ -63,10 +80,10 @@ public class CocktailsController : ApiController
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCocktail(Guid id)
     {
-        var getCocktailResult = await _cocktailService.GetCocktail(id);
+        var getCocktailResult = await _cocktailService.GetDetailedCocktail(id);
 
         return getCocktailResult.Match(
-            cocktail => Ok(MapCocktailResponse(cocktail)),
+            Ok,
             Problem
         );
     }

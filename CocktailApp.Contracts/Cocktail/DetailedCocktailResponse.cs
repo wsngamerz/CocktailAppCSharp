@@ -1,0 +1,18 @@
+﻿using CocktailApp.Contracts.Enums;
+
+namespace CocktailApp.Contracts.Cocktail;
+
+public record DetailedCocktailResponse(
+    Guid Id,
+    string Name,
+    string Description,
+    string Slug,
+    GlassType GlassType,
+    string LiquidColor,
+    float LiquidOpacity,
+    CocktailPrivacy Privacy,
+    Guid UserId,
+    decimal Abv,
+    DateTime CreatedAt,
+    IEnumerable<CocktailIngredientResponse> Ingredients,
+    IEnumerable<CocktailInstructionResponse> Instructions);

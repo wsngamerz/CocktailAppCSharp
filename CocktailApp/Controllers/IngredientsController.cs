@@ -36,7 +36,7 @@ public class IngredientsController : ApiController
             _ => CreatedAtAction(
                 nameof(CreateIngredient),
                 new { id = ingredient.Id },
-                MapIngredientResponse(ingredient)
+                ingredient.ToResponse()
             ), Problem);
     }
 
@@ -49,7 +49,7 @@ public class IngredientsController : ApiController
     {
         var getIngredientsResult = await _ingredientService.GetIngredients();
         return getIngredientsResult.Match(
-            ingredients => Ok(ingredients.Select(MapIngredientResponse)),
+            ingredients => Ok(ingredients.Select(Ingredient.ToResponse)),
             Problem
         );
     }
@@ -67,7 +67,7 @@ public class IngredientsController : ApiController
         var getIngredientResult = await _ingredientService.GetIngredient(id);
 
         return getIngredientResult.Match(
-            ingredient => Ok(MapIngredientResponse(ingredient)),
+            ingredient => Ok(ingredient.ToResponse()),
             Problem
         );
     }
@@ -104,17 +104,5 @@ public class IngredientsController : ApiController
     {
         var deleteIngredientResult = await _ingredientService.DeleteIngredient(id);
         return deleteIngredientResult.Match(_ => NoContent(), Problem);
-    }
-
-    private static IngredientResponse MapIngredientResponse(Ingredient ingredient)
-    {
-        var response = new IngredientResponse(
-            ingredient.Id,
-            ingredient.Name,
-            ingredient.Description,
-            ingredient.CategoryId,
-            ingredient.Abv
-        );
-        return response;
     }
 }
