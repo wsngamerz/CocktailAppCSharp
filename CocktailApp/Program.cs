@@ -1,5 +1,6 @@
 using System.Reflection;
 using CocktailApp.Data;
+using CocktailApp.Models;
 using CocktailApp.Repositories;
 using CocktailApp.Repositories.Abstractions;
 using CocktailApp.Services;
@@ -25,10 +26,16 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+    builder.Services.AddScoped<IFavouriteRepository<CocktailFavourite>, CocktailFavouriteRepository>();
+    builder.Services.AddScoped<IFavouriteRepository<ListFavourite>, ListFavouriteRepository>();
+
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<ICocktailService, CocktailService>();
     builder.Services.AddScoped<IIngredientService, IngredientService>();
     builder.Services.AddScoped<IUserService, UserService>();
+
+    builder.Services.AddScoped<IFavouriteService<CocktailFavourite>, FavouriteService<CocktailFavourite>>();
+    builder.Services.AddScoped<IFavouriteService<ListFavourite>, FavouriteService<ListFavourite>>();
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();

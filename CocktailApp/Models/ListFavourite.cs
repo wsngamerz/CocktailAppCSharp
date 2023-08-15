@@ -12,4 +12,17 @@ public class ListFavourite
 
     [ForeignKey(nameof(UserId))] public User User { get; set; }
     [ForeignKey(nameof(ListId))] public List List { get; set; }
+
+    private ListFavourite()
+    {
+    }
+
+    public static ListFavourite CreateId(Guid userId, Guid listId)
+    {
+        return new ListFavourite
+        {
+            UserId = userId,
+            ListId = listId
+        };
+    }
 }

@@ -12,4 +12,17 @@ public class CocktailFavourite
 
     [ForeignKey(nameof(UserId))] public User User { get; set; }
     [ForeignKey(nameof(CocktailId))] public Cocktail Cocktail { get; set; }
+
+    private CocktailFavourite()
+    {
+    }
+
+    public static CocktailFavourite CreateId(Guid userId, Guid cocktailId)
+    {
+        return new CocktailFavourite
+        {
+            UserId = userId,
+            CocktailId = cocktailId
+        };
+    }
 }
