@@ -1,6 +1,7 @@
 using CocktailApp.Contracts.User;
 using CocktailApp.Models;
 using CocktailApp.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CocktailApp.Controllers;
@@ -78,6 +79,26 @@ public class UsersController : ApiController
     {
         var deleteUserResult = await _userService.DeleteUser(id);
         return deleteUserResult.Match(_ => NoContent(), Problem);
+    }
+
+    [HttpGet("/me")]
+    [Authorize]
+    public CurrentUserResponse GetCurrentUser()
+    {
+        var user = this.User;
+
+        return new CurrentUserResponse(
+            new Guid(),
+            user.Claims.ToDictionary(c => c.Type, c => c.Value)
+        );
+    }
+
+    [HttpPost("/login")]
+    public async Task<IActionResult> LoginUser(LoginUserRequest request)
+    {
+        var loginResult = await _userService.LoginUser(request.Email, request.Password);
+        
+        return loginResult.IsError ? Problem(loginResult.Errors) : Ok(loginResult.Value);
     }
 
     private static UserResponse MapUserResponse(User user)

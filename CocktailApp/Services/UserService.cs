@@ -9,11 +9,15 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IBarItemRepository _barItemRepository;
+    private readonly ISupabaseService _supabaseService;
 
-    public UserService(IUserRepository userRepository, IBarItemRepository barItemRepository)
+    public UserService(IUserRepository userRepository,
+        IBarItemRepository barItemRepository,
+        ISupabaseService supabaseService)
     {
         _userRepository = userRepository;
         _barItemRepository = barItemRepository;
+        _supabaseService = supabaseService;
     }
 
     public Task<ErrorOr<Created>> CreateUser(User user)
@@ -44,5 +48,10 @@ public class UserService : IUserService
     public Task<ErrorOr<Deleted>> DeleteUser(Guid id)
     {
         return _userRepository.Delete(id);
+    }
+
+    public async Task<ErrorOr<string>> LoginUser(string email, string password)
+    {
+        return await _supabaseService.LoginUser(email, password);
     }
 }

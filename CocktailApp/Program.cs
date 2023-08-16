@@ -1,10 +1,12 @@
 using System.Reflection;
+using CocktailApp.Auth;
 using CocktailApp.Data;
 using CocktailApp.Models;
 using CocktailApp.Repositories;
 using CocktailApp.Repositories.Abstractions;
 using CocktailApp.Services;
 using CocktailApp.Services.Abstractions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -19,6 +21,14 @@ var builder = WebApplication.CreateBuilder(args);
             builder.Configuration.GetConnectionString("DefaultConnection")
         );
     });
+
+    builder.Services.AddSingleton<ISupabaseService>(new SupabaseService(
+        builder.Configuration["Supabase:Url"] ?? string.Empty,
+        builder.Configuration["Supabase:Key"] ?? string.Empty
+    ));
+
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearerConfiguration(builder.Configuration["Supabase:JwtSecret"] ?? string.Empty);
 
     builder.Services.AddScoped<IBarItemRepository, BarItemRepository>();
     builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -51,6 +61,32 @@ var builder = WebApplication.CreateBuilder(args);
             Description = "The cocktail app API"
         });
 
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description =
+                "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
@@ -67,6 +103,7 @@ var app = builder.Build();
 
     app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
     app.Run();

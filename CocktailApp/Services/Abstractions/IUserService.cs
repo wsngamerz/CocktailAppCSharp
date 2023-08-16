@@ -10,4 +10,5 @@ public interface IUserService
     Task<ErrorOr<IEnumerable<User>>> GetUsers();
     Task<ErrorOr<Updated>> UpdateUser(User user);
     Task<ErrorOr<Deleted>> DeleteUser(Guid id);
+    Task<ErrorOr<string>> LoginUser(string email, string password);
 }
