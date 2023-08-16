@@ -37,7 +37,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUserRepository, UserRepository>();
 
     builder.Services.AddScoped<IFavouriteRepository<CocktailFavourite>, CocktailFavouriteRepository>();
-    builder.Services.AddScoped<IFavouriteRepository<ListFavourite>, ListFavouriteRepository>();
+    builder.Services.AddScoped<IFavouriteRepository<CocktailListFavourite>, CocktailListFavouriteRepository>();
 
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<ICocktailService, CocktailService>();
@@ -45,7 +45,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUserService, UserService>();
 
     builder.Services.AddScoped<IFavouriteService<CocktailFavourite>, FavouriteService<CocktailFavourite>>();
-    builder.Services.AddScoped<IFavouriteService<ListFavourite>, FavouriteService<ListFavourite>>();
+    builder.Services.AddScoped<IFavouriteService<CocktailListFavourite>, FavouriteService<CocktailListFavourite>>();
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
     builder.Services.AddControllers();

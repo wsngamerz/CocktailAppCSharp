@@ -15,10 +15,10 @@ public class CocktailAppContext : DbContext
     public DbSet<CocktailIngredient> CocktailIngredients { get; set; }
     public DbSet<CocktailInstruction> CocktailInstructions { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
-    public DbSet<List> Lists { get; set; }
-    public DbSet<ListItem> ListItems { get; set; }
+    public DbSet<CocktailList> Lists { get; set; }
+    public DbSet<CocktailListItem> ListItems { get; set; }
     public DbSet<User> Users { get; set; }
 
     public DbSet<CocktailFavourite> CocktailFavourites { get; set; }
-    public DbSet<ListFavourite> ListFavourites { get; set; }
+    public DbSet<CocktailListFavourite> CocktailListFavourites { get; set; }
 }

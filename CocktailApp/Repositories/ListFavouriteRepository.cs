@@ -6,44 +6,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CocktailApp.Repositories;
 
-public class ListFavouriteRepository : IListFavouriteRepository
+public class CocktailListFavouriteRepository : ICocktailListFavouriteRepository
 {
     private readonly CocktailAppContext _context;
 
-    public ListFavouriteRepository(CocktailAppContext context)
+    public CocktailListFavouriteRepository(CocktailAppContext context)
     {
         _context = context;
     }
 
-    public async Task<ErrorOr<Created>> Create(ListFavourite value)
+    public async Task<ErrorOr<Created>> Create(CocktailListFavourite value)
     {
-        await _context.ListFavourites.AddAsync(value);
+        await _context.CocktailListFavourites.AddAsync(value);
         await _context.SaveChangesAsync();
         return Result.Created;
     }
 
-    public async Task<ErrorOr<ListFavourite>> Get(params Guid[] ids)
+    public async Task<ErrorOr<CocktailListFavourite>> Get(params Guid[] ids)
     {
         if (ids.Length != 2)
             return Error.Validation();
         var userId = ids[0];
         var listId = ids[1];
 
-        var listFavourite = await _context.ListFavourites.FindAsync(userId, listId);
+        var listFavourite = await _context.CocktailListFavourites.FindAsync(userId, listId);
         if (listFavourite is null)
             return Error.NotFound();
 
         return listFavourite;
     }
 
-    public async Task<ErrorOr<IEnumerable<ListFavourite>>> All()
+    public async Task<ErrorOr<IEnumerable<CocktailListFavourite>>> All()
     {
-        return await _context.ListFavourites.ToListAsync();
+        return await _context.CocktailListFavourites.ToListAsync();
     }
 
-    public async Task<ErrorOr<Updated>> Update(ListFavourite value)
+    public async Task<ErrorOr<Updated>> Update(CocktailListFavourite value)
     {
-        _context.ListFavourites.Update(value);
+        _context.CocktailListFavourites.Update(value);
         await _context.SaveChangesAsync();
 
         return Result.Updated;
@@ -56,19 +56,19 @@ public class ListFavouriteRepository : IListFavouriteRepository
         var userId = ids[0];
         var listId = ids[1];
 
-        _context.ListFavourites.Remove(ListFavourite.CreateId(userId, listId));
+        _context.CocktailListFavourites.Remove(CocktailListFavourite.CreateId(userId, listId));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }
 
     public async Task<ErrorOr<int>> Count()
     {
-        return await _context.ListFavourites.CountAsync();
+        return await _context.CocktailListFavourites.CountAsync();
     }
 
-    public async Task<ErrorOr<IEnumerable<ListFavourite>>> GetByUserId(Guid id)
+    public async Task<ErrorOr<IEnumerable<CocktailListFavourite>>> GetByUserId(Guid id)
     {
-        var listFavourites = await _context.ListFavourites.Where(item => item.UserId == id).ToListAsync();
+        var listFavourites = await _context.CocktailListFavourites.Where(item => item.UserId == id).ToListAsync();
         return listFavourites;
     }
 }

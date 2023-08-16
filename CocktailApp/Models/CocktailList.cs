@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CocktailApp.Models;
 
 [Table("Lists"), PrimaryKey(nameof(Id))]
-public class List
+public class CocktailList
 {
     [Key] public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -16,5 +16,5 @@ public class List
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
     
-    public ICollection<ListItem> Items { get; set; }
+    public ICollection<CocktailListItem> Items { get; set; }
 }

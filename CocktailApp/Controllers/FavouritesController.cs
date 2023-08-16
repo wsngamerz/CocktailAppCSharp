@@ -8,10 +8,10 @@ namespace CocktailApp.Controllers;
 public class FavouritesController : ApiController
 {
     private readonly FavouriteService<CocktailFavourite> _cocktailFavouriteService;
-    private readonly FavouriteService<ListFavourite> _listFavouriteService;
+    private readonly FavouriteService<CocktailListFavourite> _listFavouriteService;
 
     public FavouritesController(FavouriteService<CocktailFavourite> cocktailFavouriteService,
-        FavouriteService<ListFavourite> listFavouriteService)
+        FavouriteService<CocktailListFavourite> listFavouriteService)
     {
         _cocktailFavouriteService = cocktailFavouriteService;
         _listFavouriteService = listFavouriteService;
