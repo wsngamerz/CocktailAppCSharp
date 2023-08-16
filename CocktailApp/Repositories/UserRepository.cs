@@ -36,12 +36,12 @@ public class UserRepository : IUserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<ErrorOr<Updated>> Update(User user)
+    public async Task<ErrorOr<User>> Update(User user)
     {
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return user;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

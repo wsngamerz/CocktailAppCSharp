@@ -41,7 +41,7 @@ public class CocktailService : ICocktailService
         return await _cocktailRepository.All();
     }
 
-    public async Task<ErrorOr<Updated>> UpdateCocktail(Cocktail cocktail)
+    public async Task<ErrorOr<Cocktail>> UpdateCocktail(Cocktail cocktail)
     {
         return await _cocktailRepository.Update(cocktail);
     }

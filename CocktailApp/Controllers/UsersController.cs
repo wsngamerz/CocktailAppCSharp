@@ -24,7 +24,7 @@ public class UsersController : ApiController
     {
         var getUsersResult = await _userService.GetUsers();
         return getUsersResult.Match(
-            users => Ok(users.Select(MapUserResponse)),
+            users => Ok(users.Select(Models.User.ToResponse)),
             Problem
         );
     }
@@ -42,7 +42,7 @@ public class UsersController : ApiController
         var getUserResult = await _userService.GetUser(id);
 
         return getUserResult.Match(
-            user => Ok(MapUserResponse(user)),
+            user => Ok(user.ToResponse()),
             Problem
         );
     }
@@ -53,7 +53,6 @@ public class UsersController : ApiController
     /// <param name="id"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    /// <response code="204">If the user is updated</response>
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If the user is not found</response>
     [HttpPut("{id:guid}")]
@@ -66,7 +65,7 @@ public class UsersController : ApiController
         var user = requestToUserResult.Value;
 
         var updateUserResult = await _userService.UpdateUser(user);
-        return updateUserResult.Match(_ => NoContent(), Problem);
+        return updateUserResult.Match(result => Ok(user.ToResponse()), Problem);
     }
 
     /// <summary>
@@ -85,11 +84,9 @@ public class UsersController : ApiController
     [Authorize]
     public CurrentUserResponse GetCurrentUser()
     {
-        var user = this.User;
-
         return new CurrentUserResponse(
             new Guid(),
-            user.Claims.ToDictionary(c => c.Type, c => c.Value)
+            User.Claims.ToDictionary(c => c.Type, c => c.Value)
         );
     }
 
@@ -99,21 +96,5 @@ public class UsersController : ApiController
         var loginResult = await _userService.LoginUser(request.Email, request.Password);
         
         return loginResult.IsError ? Problem(loginResult.Errors) : Ok(loginResult.Value);
-    }
-
-    private static UserResponse MapUserResponse(User user)
-    {
-        var response = new UserResponse(
-            user.Id,
-            user.FirstName,
-            user.LastName,
-            user.Bio,
-            user.AccentColor,
-            user.ImageUrl,
-            user.Privacy,
-            user.Role,
-            user.CreatedAt
-        );
-        return response;
     }
 }

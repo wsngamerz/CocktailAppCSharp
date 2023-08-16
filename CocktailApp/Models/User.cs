@@ -103,4 +103,25 @@ public class User
             id
         );
     }
+    
+    public static UserResponse ToResponse(User user)
+    {
+        var response = new UserResponse(
+            user.Id,
+            user.FirstName,
+            user.LastName,
+            user.Bio,
+            user.AccentColor,
+            user.ImageUrl,
+            user.Privacy,
+            user.Role,
+            user.CreatedAt
+        );
+        return response;
+    }
+
+    public UserResponse ToResponse()
+    {
+        return ToResponse(this);
+    }
 }

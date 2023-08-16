@@ -78,7 +78,6 @@ public class IngredientsController : ApiController
     /// <param name="id"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    /// <response code="204">If the ingredient is updated</response>
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If the ingredient is not found</response>
     [HttpPut("{id:guid}")]
@@ -91,7 +90,7 @@ public class IngredientsController : ApiController
         var ingredient = requestToIngredientResult.Value;
 
         var updateIngredientResult = await _ingredientService.UpdateIngredient(ingredient);
-        return updateIngredientResult.Match(_ => NoContent(), Problem);
+        return updateIngredientResult.Match(result => Ok(result.ToResponse()), Problem);
     }
 
     /// <summary>

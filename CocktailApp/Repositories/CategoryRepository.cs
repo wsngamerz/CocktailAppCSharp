@@ -36,12 +36,12 @@ public class CategoryRepository : ICategoryRepository
         return await _context.Categories.ToListAsync();
     }
 
-    public async Task<ErrorOr<Updated>> Update(Category category)
+    public async Task<ErrorOr<Category>> Update(Category category)
     {
         _context.Categories.Update(category);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return category;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

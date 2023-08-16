@@ -90,18 +90,6 @@ public class Ingredient
         );
     }
 
-    public IngredientResponse ToResponse()
-    {
-        var response = new IngredientResponse(
-            Id,
-            Name,
-            Description,
-            CategoryId,
-            Abv
-        );
-        return response;
-    }
-
     public static IngredientResponse ToResponse(Ingredient ingredient)
     {
         var response = new IngredientResponse(
@@ -112,5 +100,10 @@ public class Ingredient
             ingredient.Abv
         );
         return response;
+    }
+
+    public IngredientResponse ToResponse()
+    {
+        return ToResponse(this);
     }
 }

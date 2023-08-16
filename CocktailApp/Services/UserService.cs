@@ -40,7 +40,7 @@ public class UserService : IUserService
         return _barItemRepository.GetByUserId(userId);
     }
 
-    public Task<ErrorOr<Updated>> UpdateUser(User user)
+    public Task<ErrorOr<User>> UpdateUser(User user)
     {
         return _userRepository.Update(user);
     }

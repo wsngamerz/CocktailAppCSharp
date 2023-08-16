@@ -29,7 +29,7 @@ public class CategoryService: ICategoryService
         return await _categoryRepository.All();
     }
 
-    public async Task<ErrorOr<Updated>> UpdateCategory(Category category)
+    public async Task<ErrorOr<Category>> UpdateCategory(Category category)
     {
         return await _categoryRepository.Update(category);
     }

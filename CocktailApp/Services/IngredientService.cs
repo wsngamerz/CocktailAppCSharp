@@ -29,7 +29,7 @@ public class IngredientService: IIngredientService
         return await _ingredientRepository.All();
     }
 
-    public async Task<ErrorOr<Updated>> UpdateIngredient(Ingredient ingredient)
+    public async Task<ErrorOr<Ingredient>> UpdateIngredient(Ingredient ingredient)
     {
         return await _ingredientRepository.Update(ingredient);
     }

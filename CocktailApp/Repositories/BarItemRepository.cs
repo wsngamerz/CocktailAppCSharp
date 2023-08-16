@@ -46,12 +46,12 @@ public class BarItemRepository : IBarItemRepository
         return barItems;
     }
 
-    public async Task<ErrorOr<Updated>> Update(BarItem barItem)
+    public async Task<ErrorOr<BarItem>> Update(BarItem barItem)
     {
         _context.BarItems.Update(barItem);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return barItem;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

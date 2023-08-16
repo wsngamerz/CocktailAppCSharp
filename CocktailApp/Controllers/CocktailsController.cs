@@ -52,7 +52,7 @@ public class CocktailsController : ApiController
             _ => CreatedAtAction(
                 nameof(GetCocktail),
                 new { id = cocktail.Id },
-                MapCocktailResponse(cocktail)
+                cocktail.ToResponse()
             ), Problem);
     }
 
@@ -65,7 +65,7 @@ public class CocktailsController : ApiController
     {
         var getCocktailsResult = await _cocktailService.GetCocktails();
         return getCocktailsResult.Match(
-            cocktails => Ok(cocktails.Select(MapCocktailResponse)),
+            cocktails => Ok(cocktails.Select(Cocktail.ToResponse)),
             Problem
         );
     }
@@ -94,7 +94,6 @@ public class CocktailsController : ApiController
     /// <param name="id"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    /// <response code="204">If the cocktail is updated</response>
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If the cocktail is not found</response>
     [HttpPut("{id:guid}")]
@@ -107,7 +106,7 @@ public class CocktailsController : ApiController
         var cocktail = requestToCocktailResult.Value;
 
         var updateCocktailResult = await _cocktailService.UpdateCocktail(cocktail);
-        return updateCocktailResult.Match(_ => NoContent(), Problem);
+        return updateCocktailResult.Match(result => Ok(result.ToResponse()), Problem);
     }
 
     /// <summary>
@@ -120,23 +119,5 @@ public class CocktailsController : ApiController
     {
         var deleteCocktailResult = await _cocktailService.DeleteCocktail(id);
         return deleteCocktailResult.Match(_ => NoContent(), Problem);
-    }
-
-    private static CocktailResponse MapCocktailResponse(Cocktail cocktail)
-    {
-        var response = new CocktailResponse(
-            cocktail.Id,
-            cocktail.Name,
-            cocktail.Description,
-            cocktail.Slug,
-            cocktail.GlassType,
-            cocktail.LiquidColor,
-            cocktail.LiquidOpacity,
-            cocktail.Privacy,
-            cocktail.UserId,
-            cocktail.Abv,
-            cocktail.CreatedAt
-        );
-        return response;
     }
 }

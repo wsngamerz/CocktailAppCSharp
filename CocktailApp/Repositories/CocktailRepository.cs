@@ -95,12 +95,12 @@ public class CocktailRepository : ICocktailRepository
         );
     }
 
-    public async Task<ErrorOr<Updated>> Update(Cocktail cocktail)
+    public async Task<ErrorOr<Cocktail>> Update(Cocktail cocktail)
     {
         _context.Cocktails.Update(cocktail);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return cocktail;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

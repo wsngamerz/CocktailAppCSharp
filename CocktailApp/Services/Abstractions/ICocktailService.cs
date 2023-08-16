@@ -13,6 +13,6 @@ public interface ICocktailService
     Task<ErrorOr<Cocktail>> GetCocktail(Guid id);
     Task<ErrorOr<DetailedCocktail>> GetDetailedCocktail(Guid id);
     Task<ErrorOr<IEnumerable<Cocktail>>> GetCocktails();
-    Task<ErrorOr<Updated>> UpdateCocktail(Cocktail cocktail);
+    Task<ErrorOr<Cocktail>> UpdateCocktail(Cocktail cocktail);
     Task<ErrorOr<Deleted>> DeleteCocktail(Guid id);
 }

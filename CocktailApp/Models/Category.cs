@@ -88,4 +88,20 @@ public class Category
             id
         );
     }
+
+    public static CategoryResponse ToResponse(Category category)
+    {
+        var response = new CategoryResponse(
+            category.Id,
+            category.Name,
+            category.Description,
+            category.ParentId
+        );
+        return response;
+    }
+    
+    public CategoryResponse ToResponse()
+    {
+        return ToResponse(this);
+    }
 }

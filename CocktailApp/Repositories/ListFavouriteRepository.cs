@@ -41,12 +41,12 @@ public class CocktailListFavouriteRepository : ICocktailListFavouriteRepository
         return await _context.CocktailListFavourites.ToListAsync();
     }
 
-    public async Task<ErrorOr<Updated>> Update(CocktailListFavourite value)
+    public async Task<ErrorOr<CocktailListFavourite>> Update(CocktailListFavourite value)
     {
         _context.CocktailListFavourites.Update(value);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return value;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

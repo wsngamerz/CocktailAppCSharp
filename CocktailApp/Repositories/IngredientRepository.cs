@@ -36,12 +36,12 @@ public class IngredientRepository : IIngredientRepository
         return await _context.Ingredients.ToListAsync();
     }
 
-    public async Task<ErrorOr<Updated>> Update(Ingredient ingredient)
+    public async Task<ErrorOr<Ingredient>> Update(Ingredient ingredient)
     {
         _context.Ingredients.Update(ingredient);
         await _context.SaveChangesAsync();
 
-        return Result.Updated;
+        return ingredient;
     }
 
     public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)

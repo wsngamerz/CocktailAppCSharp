@@ -35,7 +35,7 @@ public class CategoriesController : ApiController
             _ => CreatedAtAction(
                 nameof(CreateCategory),
                 new { id = category.Id },
-                MapCategoryResponse(category)
+                category.ToResponse()
             ), Problem);
     }
 
@@ -48,7 +48,7 @@ public class CategoriesController : ApiController
     {
         var getCategoriesResult = await _categoryService.GetCategories();
         return getCategoriesResult.Match(
-            categories => Ok(categories.Select(MapCategoryResponse)),
+            categories => Ok(categories.Select(Category.ToResponse)),
             Problem
         );
     }
@@ -66,7 +66,7 @@ public class CategoriesController : ApiController
         var getCategoryResult = await _categoryService.GetCategory(id);
 
         return getCategoryResult.Match(
-            category => Ok(MapCategoryResponse(category)),
+            category => Ok(category.ToResponse()),
             Problem
         );
     }
@@ -77,7 +77,6 @@ public class CategoriesController : ApiController
     /// <param name="id"></param>
     /// <param name="request"></param>
     /// <returns></returns>
-    /// <response code="204">If the category is updated</response>
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If the category is not found</response>
     [HttpPut("{id:guid}")]
@@ -90,7 +89,7 @@ public class CategoriesController : ApiController
         var category = requestToCategoryResult.Value;
 
         var updateCategoryResult = await _categoryService.UpdateCategory(category);
-        return updateCategoryResult.Match(_ => NoContent(), Problem);
+        return updateCategoryResult.Match(result => Ok(result.ToResponse()), Problem);
     }
 
     /// <summary>
@@ -103,16 +102,5 @@ public class CategoriesController : ApiController
     {
         var deleteCategoryResult = await _categoryService.DeleteCategory(id);
         return deleteCategoryResult.Match(_ => NoContent(), Problem);
-    }
-
-    private static CategoryResponse MapCategoryResponse(Category category)
-    {
-        var response = new CategoryResponse(
-            category.Id,
-            category.Name,
-            category.Description,
-            category.ParentId
-        );
-        return response;
     }
 }

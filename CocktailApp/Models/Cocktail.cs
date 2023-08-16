@@ -118,6 +118,29 @@ public class Cocktail
         );
     }
 
+    public static CocktailResponse ToResponse(Cocktail cocktail)
+    {
+        var response = new CocktailResponse(
+            cocktail.Id,
+            cocktail.Name,
+            cocktail.Description,
+            cocktail.Slug,
+            cocktail.GlassType,
+            cocktail.LiquidColor,
+            cocktail.LiquidOpacity,
+            cocktail.Privacy,
+            cocktail.UserId,
+            cocktail.Abv,
+            cocktail.CreatedAt
+        );
+        return response;
+    }
+    
+    public CocktailResponse ToResponse()
+    {
+        return ToResponse(this);
+    }
+    
     private static string GenerateSlug(string name)
     {
         return name.ToLower().Replace(" ", "-");
