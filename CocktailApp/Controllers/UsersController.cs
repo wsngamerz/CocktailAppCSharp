@@ -81,7 +81,7 @@ public class UsersController : ApiController
         return deleteUserResult.Match(_ => NoContent(), Problem);
     }
 
-    [HttpGet("/me")]
+    [HttpGet("me")]
     [Authorize]
     public CurrentUserResponse GetCurrentUser()
     {
@@ -93,7 +93,7 @@ public class UsersController : ApiController
         );
     }
 
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<IActionResult> LoginUser(LoginUserRequest request)
     {
         var loginResult = await _userService.LoginUser(request.Email, request.Password);
