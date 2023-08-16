@@ -30,7 +30,7 @@ public class CocktailIngredient
                 Amount = ingredient.Amount,
                 Unit = ingredient.Unit,
                 Position = ingredient.Position
-            }).ToList();
+            });
         }
         catch
         {
