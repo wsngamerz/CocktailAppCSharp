@@ -27,12 +27,12 @@ public class UserService : IUserService
 
     public Task<ErrorOr<User>> GetUser(Guid userId)
     {
-        return _userRepository.Get(userId);
+        return _userRepository.GetById(userId);
     }
 
     public Task<ErrorOr<IEnumerable<User>>> GetUsers()
     {
-        return _userRepository.All();
+        return _userRepository.GetAll();
     }
 
     public Task<ErrorOr<IEnumerable<BarItem>>> GetUserBar(Guid userId)

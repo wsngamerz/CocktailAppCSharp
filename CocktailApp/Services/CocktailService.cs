@@ -28,7 +28,7 @@ public class CocktailService : ICocktailService
 
     public async Task<ErrorOr<Cocktail>> GetCocktail(Guid id)
     {
-        return await _cocktailRepository.Get(id);
+        return await _cocktailRepository.GetById(id);
     }
 
     public async Task<ErrorOr<DetailedCocktail>> GetDetailedCocktail(Guid id)
@@ -38,7 +38,7 @@ public class CocktailService : ICocktailService
 
     public async Task<ErrorOr<IEnumerable<Cocktail>>> GetCocktails()
     {
-        return await _cocktailRepository.All();
+        return await _cocktailRepository.GetAll();
     }
 
     public async Task<ErrorOr<Cocktail>> UpdateCocktail(Cocktail cocktail)

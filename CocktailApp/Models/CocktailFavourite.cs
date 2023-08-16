@@ -17,12 +17,12 @@ public class CocktailFavourite
     {
     }
 
-    public static CocktailFavourite CreateId(Guid userId, Guid cocktailId)
+    public static CocktailFavourite CreateId(Guid[] keys)
     {
         return new CocktailFavourite
         {
-            UserId = userId,
-            CocktailId = cocktailId
+            UserId = keys[0],
+            CocktailId = keys[1]
         };
     }
 }

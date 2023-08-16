@@ -22,21 +22,19 @@ public class CocktailFavouriteRepository : ICocktailFavouriteRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<CocktailFavourite>> Get(params Guid[] ids)
+    public async Task<ErrorOr<CocktailFavourite>> GetById(params Guid[] keys)
     {
-        if (ids.Length != 2)
+        if (keys.Length != 2)
             return Error.Validation();
-        var userId = ids[0];
-        var cocktailId = ids[1];
 
-        var cocktailFavourite = await _context.CocktailFavourites.FindAsync(userId, cocktailId);
+        var cocktailFavourite = await _context.CocktailFavourites.FindAsync(keys);
         if (cocktailFavourite is null)
             return Error.NotFound();
 
         return cocktailFavourite;
     }
 
-    public async Task<ErrorOr<IEnumerable<CocktailFavourite>>> All()
+    public async Task<ErrorOr<IEnumerable<CocktailFavourite>>> GetAll()
     {
         return await _context.CocktailFavourites.ToListAsync();
     }
@@ -49,14 +47,12 @@ public class CocktailFavouriteRepository : ICocktailFavouriteRepository
         return value;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] keys)
     {
-        if (ids.Length != 2)
+        if (keys.Length != 2)
             return Error.Validation();
-        var userId = ids[0];
-        var cocktailId = ids[1];
 
-        _context.CocktailFavourites.Remove(CocktailFavourite.CreateId(userId, cocktailId));
+        _context.CocktailFavourites.Remove(CocktailFavourite.CreateId(keys));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

@@ -37,16 +37,16 @@ public class CocktailRepository : ICocktailRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<Cocktail>> Get(params Guid[] ids)
+    public async Task<ErrorOr<Cocktail>> GetById(params Guid[] keys)
     {
-        var cocktail = await _context.Cocktails.FindAsync(ids[0]);
+        var cocktail = await _context.Cocktails.FindAsync(keys);
         if (cocktail is null)
             return Error.NotFound();
 
         return cocktail;
     }
 
-    public async Task<ErrorOr<IEnumerable<Cocktail>>> All()
+    public async Task<ErrorOr<IEnumerable<Cocktail>>> GetAll()
     {
         return await _context.Cocktails.ToListAsync();
     }
@@ -103,9 +103,9 @@ public class CocktailRepository : ICocktailRepository
         return cocktail;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] keys)
     {
-        _context.Cocktails.Remove(Cocktail.CreateId(ids[0]));
+        _context.Cocktails.Remove(Cocktail.CreateId(keys[0]));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

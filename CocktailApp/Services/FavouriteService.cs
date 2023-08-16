@@ -20,7 +20,7 @@ public class FavouriteService<T>: IFavouriteService<T>
 
     public async Task<ErrorOr<IEnumerable<T>>> AllFavourites()
     {
-        return await _favouriteRepository.All();
+        return await _favouriteRepository.GetAll();
     }
 
     public async Task<ErrorOr<IEnumerable<T>>> UserFavourites(Guid userId)

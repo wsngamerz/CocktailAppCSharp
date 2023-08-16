@@ -22,16 +22,16 @@ public class IngredientRepository : IIngredientRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<Ingredient>> Get(params Guid[] ids)
+    public async Task<ErrorOr<Ingredient>> GetById(params Guid[] keys)
     {
-        var ingredient = await _context.Ingredients.FindAsync(ids[0]);
+        var ingredient = await _context.Ingredients.FindAsync(keys);
         if (ingredient is null)
             return Error.NotFound();
 
         return ingredient;
     }
 
-    public async Task<ErrorOr<IEnumerable<Ingredient>>> All()
+    public async Task<ErrorOr<IEnumerable<Ingredient>>> GetAll()
     {
         return await _context.Ingredients.ToListAsync();
     }
@@ -44,9 +44,9 @@ public class IngredientRepository : IIngredientRepository
         return ingredient;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] keys)
     {
-        _context.Ingredients.Remove(Ingredient.CreateId(ids[0]));
+        _context.Ingredients.Remove(Ingredient.CreateId(keys[0]));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

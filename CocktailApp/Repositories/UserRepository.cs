@@ -22,16 +22,16 @@ public class UserRepository : IUserRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<User>> Get(params Guid[] ids)
+    public async Task<ErrorOr<User>> GetById(params Guid[] keys)
     {
-        var user = await _context.Users.FindAsync(ids[0]);
+        var user = await _context.Users.FindAsync(keys);
         if (user is null)
             return Error.NotFound();
 
         return user;
     }
 
-    public async Task<ErrorOr<IEnumerable<User>>> All()
+    public async Task<ErrorOr<IEnumerable<User>>> GetAll()
     {
         return await _context.Users.ToListAsync();
     }
@@ -44,9 +44,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] keys)
     {
-        _context.Users.Remove(User.CreateId(ids[0]));
+        _context.Users.Remove(User.CreateId(keys[0]));
         await _context.SaveChangesAsync();
         return Result.Deleted;
     }

@@ -17,12 +17,12 @@ public class BarItem
     {
     }
 
-    public static BarItem CreateId(Guid userId, Guid ingredientId)
+    public static BarItem CreateId(Guid[] keys)
     {
         return new BarItem
         {
-            UserId = userId,
-            IngredientId = ingredientId
+            UserId = keys[0],
+            IngredientId = keys[1]
         };
     }
 }

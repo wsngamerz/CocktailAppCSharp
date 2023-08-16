@@ -22,20 +22,18 @@ public class BarItemRepository : IBarItemRepository
         return Result.Created;
     }
 
-    public async Task<ErrorOr<BarItem>> Get(params Guid[] ids)
+    public async Task<ErrorOr<BarItem>> GetById(params Guid[] keys)
     {
-        if (ids.Length != 2)
+        if (keys.Length != 2)
             return Error.Custom(0, "IncorrectArgCount", "Incorrect number of ids");
-        var userId = ids[0];
-        var ingredientId = ids[1];
         
-        var barItem = await _context.BarItems.FindAsync(userId, ingredientId);
+        var barItem = await _context.BarItems.FindAsync(keys);
         if (barItem is null)
             return Error.NotFound();
         return barItem;
     }
 
-    public async Task<ErrorOr<IEnumerable<BarItem>>> All()
+    public async Task<ErrorOr<IEnumerable<BarItem>>> GetAll()
     {
         return await _context.BarItems.ToListAsync();
     }
@@ -54,14 +52,12 @@ public class BarItemRepository : IBarItemRepository
         return barItem;
     }
 
-    public async Task<ErrorOr<Deleted>> Delete(params Guid[] ids)
+    public async Task<ErrorOr<Deleted>> Delete(params Guid[] keys)
     {
-        if (ids.Length != 2)
+        if (keys.Length != 2)
             return Error.Custom(0, "IncorrectArgCount", "Incorrect number of ids");
-        var userId = ids[0];
-        var ingredientId = ids[1];
         
-        _context.BarItems.Remove(BarItem.CreateId(userId, ingredientId));
+        _context.BarItems.Remove(BarItem.CreateId(keys));
         await _context.SaveChangesAsync();
         return Result.Deleted;   
     }
