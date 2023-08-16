@@ -40,28 +40,4 @@ public class FavouritesController : ApiController
     {
         throw new NotImplementedException();
     }
-    
-    [HttpGet("{userId:guid}/cocktails")]
-    public Task<IActionResult> GetUserFavouriteCocktails(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpPost("{userId:guid}/cocktails")]
-    public Task<IActionResult> UpdateUserFavouriteCocktails(Guid userId, FavouriteRequest request)
-    {
-        throw new NotImplementedException();
-    }
-    
-    [HttpGet("{userId:guid}/lists")]
-    public Task<IActionResult> GetUserFavouriteLists(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpPost("{userId:guid}/lists")]
-    public Task<IActionResult> UpdateUserFavouriteLists(Guid userId, FavouriteRequest request)
-    {
-        throw new NotImplementedException();
-    }
 }
