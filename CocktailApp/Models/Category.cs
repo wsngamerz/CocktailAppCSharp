@@ -23,7 +23,7 @@ public class Category
 
     public Guid? ParentId { get; set; }
 
-    [ForeignKey(nameof(ParentId))] public Category Parent { get; set; }
+    [ForeignKey(nameof(ParentId))] public Category? Parent { get; set; }
 
 
     private Category()
